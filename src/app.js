@@ -1,27 +1,22 @@
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
-
-// Routes
 const productRoutes = require('../routes/productRoutes');
 const userRoutes = require('../routes/userRoutes');
 
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// API Routes
+// Serve static frontend files from "public" folder
+app.use(express.static('public'));
+
+// Routes
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, '../public')));
-
+// Test route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.send('Welcome to ElectroMart API 🚀');
 });
 
 module.exports = app;
