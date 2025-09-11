@@ -1,40 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ElectroMart</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>⚡ ElectroMart</h1>
-    <p>Your simple tech shop</p>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>⚡ ElectroMart</h1>
+      <p class="tag">Your one-stop tech shop</p>
+    </div>
   </header>
 
-  <main>
-    <section class="shop">
-      <h2>Products</h2>
-      <div id="products" class="products-grid">
-        <!-- Products will load here -->
-      </div>
-    </section>
+  <main id="main" class="wrap">
+    <section id="product-list" aria-label="Products grid"></section>
 
-    <aside class="cart">
-      <h2>🛒 Cart</h2>
+    <aside id="cart" aria-label="Shopping cart">
+      <h2>🛒 Your Cart</h2>
       <ul id="cart-items"></ul>
-      <p id="cart-total">Total: $0</p>
-      <h2>🛒 Shopping Cart</h2>
-        <ul id="cart-items"></ul>
-        <p id="cart-total">Total: $0</p>
-        <button id="checkout-btn" onclick="checkout()" disabled>✅ Checkout</button>
-
+      <p id="total">Total: $0</p>
+      <button id="checkout-btn">Checkout</button>
     </aside>
-        
   </main>
 
-  <footer>
-    <p>© 2025 ElectroMart</p>
+  <footer class="site-footer">
+    <div class="wrap">© 2025 ElectroMart</div>
   </footer>
 
   <script src="script.js"></script>
