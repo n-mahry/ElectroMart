@@ -15,9 +15,9 @@ async function loadProducts() {
         <img src="${product.image}" alt="${product.name}" />
         <h3>${product.name}</h3>
         <p>${product.description}</p>
-        <p><strong>💰 $${product.price}</strong></p>
+        <p><strong>$${product.price}</strong></p>
         <button onclick="addToCart(${product.id}, '${product.name}', ${product.price})">
-          🛒 Add to Cart
+          Add to Cart
         </button>
       `;
       container.appendChild(card);
@@ -48,15 +48,13 @@ function renderCart() {
   });
 
   cartTotal.textContent = `Total: $${total}`;
-
-  // Enable checkout if cart not empty
   checkoutBtn.disabled = cart.length === 0;
 }
 
 function checkout() {
   if (cart.length === 0) return;
 
-  alert("✅ Thank you for your purchase! Your order has been placed.");
+  alert("✅ Thank you for shopping at ElectroMart!");
   cart = [];
   renderCart();
 }
