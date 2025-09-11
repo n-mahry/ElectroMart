@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ElectroMart - Online Tech Store</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ElectroMart</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>⚡ ElectroMart</h1>
-    <p>Your one-stop shop for gadgets & electronics</p>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>⚡ ElectroMart</h1>
+      <p class="tag">Your one-stop tech shop</p>
+    </div>
   </header>
 
-  <main>
-    <section id="products" class="products-grid">
-      <!-- Products will load here -->
-    </section>
+  <main id="main" class="wrap">
+    <section id="product-list" aria-label="Products grid"></section>
 
-    <aside id="cart">
+    <aside id="cart" aria-label="Shopping cart">
       <h2>🛒 Your Cart</h2>
       <ul id="cart-items"></ul>
-      <p id="cart-total">Total: $0</p>
-      <button id="checkout-btn" onclick="checkout()" disabled>✅ Checkout</button>
+      <p id="total">Total: $0</p>
+      <button id="checkout-btn">Checkout</button>
     </aside>
   </main>
 
-  <footer>
-    <p>© 2025 ElectroMart. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="wrap">© 2025 ElectroMart</div>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
