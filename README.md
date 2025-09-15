@@ -31,28 +31,36 @@ This project is built as part of a **DevOps pipeline project** to demonstrate mo
 
 ## 📂 Project Structure
 electromart/
+
 ├── config/ # Database configuration
+
 ├── controllers/ # Controllers for products & users
+
 ├── models/ # Mongoose models (optional for DB)
+
 ├── public/ # Frontend files (HTML, CSS, JS)
+
 ├── routes/ # API routes
+
 ├── src/ # Core app (app.js, server.js)
+
 ├── Dockerfile # Docker image definition
+
 ├── docker-compose.yml# Multi-container setup (future)
+
 ├── .gitignore # Ignored files
+
 └── README.md # Documentation
 
 
 ---
 
 ## 🐳 Run Locally with Docker
-```bash
 # Build image
 docker build -t electromart .
 
 # Run container
 docker run -p 5000:5000 electromart
-
 
 Access the app:
 👉 http://localhost:5000
@@ -84,11 +92,3 @@ This project is for learning purposes, but feel free to fork and enhance it.
 MIT License
 
 
----
-
-👉 Once you add this file, run:  
-
-```powershell
-git add README.md
-git commit -m "Add project README"
-git push
