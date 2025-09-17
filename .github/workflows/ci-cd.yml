@@ -2,14 +2,14 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - feature/*
+    branches: [ "main", "backend-feature" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build:
+  # 1. Run Tests
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -17,25 +17,48 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests
-        run: npm test || echo "No tests yet"
+        run: npm test || echo "⚠️ No tests yet - skipping"
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
+  # 2. Build & Push Docker Image
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker image
+      - name: Build and Push
         uses: docker/build-push-action@v4
         with:
+          context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/electromart:latest
+
+  # 3. Deploy to AWS EC2 (or ECS)
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to AWS EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }} "
+            docker pull ${{ secrets.DOCKER_USERNAME }}/electromart:latest &&
+            docker stop electromart || true &&
+            docker rm electromart || true &&
+            docker run -d -p 5000:5000 --name electromart ${{ secrets.DOCKER_USERNAME }}/electromart:latest
+          "
