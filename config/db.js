@@ -1,15 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    // Use MONGO_URI from environment, fallback to local MongoDB
+    const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/electromart";
+
+    await mongoose.connect(mongoURI);
+
+    console.log(`✅ MongoDB connected: ${mongoURI}`);
   } catch (error) {
-    console.error(`❌ Error: ${error.message}`);
-    process.exit(1); // Stop app if DB fails
+    console.error("❌ MongoDB connection error:", error.message);
+    process.exit(1);
   }
 };
 

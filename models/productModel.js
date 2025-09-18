@@ -153,7 +153,7 @@ const products = [
     price: 59,
     image: "https://images.unsplash.com/photo-1594381898411-846a9f613e5c?w=800"
   },
-  // 👇 Continue adding until you reach 50
+  // Goes on until 50
 ];
 
 module.exports = products;
