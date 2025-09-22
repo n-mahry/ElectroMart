@@ -45,20 +45,3 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/electromart:latest
-
-  # 3. Deploy to AWS EC2 (or ECS)
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy to AWS EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }} "
-            docker pull ${{ secrets.DOCKER_USERNAME }}/electromart:latest &&
-            docker stop electromart || true &&
-            docker rm electromart || true &&
-            docker run -d -p 5000:5000 --name electromart ${{ secrets.DOCKER_USERNAME }}/electromart:latest
-          "
