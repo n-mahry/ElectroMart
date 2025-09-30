@@ -74,7 +74,6 @@ jobs:
           # Use the exact tag that was loaded in the previous step
           image-ref: t1nkerbe11/electromart:latest
           format: 'template'
-          template: '@./.github/workflows/trivy_template.tpl'
           output: 'trivy_envs.txt'
           exit-code: '1'
           ignore-unfixed: true
