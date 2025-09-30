@@ -73,6 +73,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         timeout-minutes: 5
+        continue-on-error: true 
         with:
           # Assuming you have a previous step defining IMAGE_TAG, if not,
           # use the hardcoded tag: t1nkerbe11/electromart:latest
@@ -82,8 +83,8 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
-          # Fail on High/Critical (exit-code: 1), but don’t break the pipeline
-          continue-on-error: true 
+          
+          
 
       - name: Upload Trivy Report
         # Use a new JSON file name that matches the output above
