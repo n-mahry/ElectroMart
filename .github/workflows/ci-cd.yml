@@ -56,12 +56,14 @@ jobs:
       # BUILD IMAGE (DO NOT PUSH YET)
       # ----------------------------------------------------------------------
       - name: Build Docker Image
-        uses: docker/build-push-action@v5 # Updated to latest v5
+        uses: docker/build-push-action@v5
         with:
           context: .
-          push: false # Critical: Build locally, do not push before scanning
-          tags: ${{ steps.image_tag.outputs.IMAGE_TAG }}
-          load: true # Critical: Load the image into the local Docker daemon for Trivy scanning
+          file: ./Dockerfile
+          push: false # We use 'push: false' here so the image is available for the next step (Trivy)
+          tags: ${{ steps.meta.outputs.tags }}
+          # ADD THESE LINES TO FORCE A FRESH BUILD
+          no-cache: true
 
      # ----------------------------------------------------------------------
       # SECURITY SCAN (Trivy)
