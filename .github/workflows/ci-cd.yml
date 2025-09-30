@@ -60,23 +60,25 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: false # We use 'push: false' here so the image is available for the next step (Trivy)
-          tags: ${{ steps.meta.outputs.tags }}
-          # ADD THESE LINES TO FORCE A FRESH BUILD
-          no-cache: true
-
+          # We must set push to false so we can scan and then push later.
+          push: false 
+          tags: t1nkerbe11/electromart:latest
+          # 🚨 THIS IS THE CRITICAL LINE: Load the image into the runner for the Trivy step
+          load: true
      # ----------------------------------------------------------------------
       # SECURITY SCAN (Trivy)
       # ----------------------------------------------------------------------
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
-        timeout-minutes: 5
         with:
-          image-ref: ${{ steps.image_tag.outputs.IMAGE_TAG }}
-          format: 'table'
+          # Use the exact tag that was loaded in the previous step
+          image-ref: t1nkerbe11/electromart:latest
+          format: 'template'
+          template: '@./.github/workflows/trivy_template.tpl'
+          output: 'trivy_envs.txt'
+          exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
-          exit-code: '1' # Set to '1' to enforce security and fail the build
 
       # ----------------------------------------------------------------------
       # PUSH IMAGE (Only if the Scan Passes)
@@ -85,5 +87,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true # Push the now-verified image
-          tags: ${{ steps.image_tag.outputs.IMAGE_TAG }}
+          file: ./Dockerfile
+          push: true
+          tags: t1nkerbe11/electromart:latest
