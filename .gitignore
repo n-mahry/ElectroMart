@@ -31,3 +31,12 @@ coverage/
 # OS files
 .DS_Store
 Thumbs.db
+
+
+# Prometheus data volume
+# This holds time-series metrics collected by Prometheus
+prometheus_data/
+
+# Grafana data volume
+# This holds user sessions, dashboard configs, and settings
+grafana_data/ 

@@ -1,0 +1,53 @@
+# docker-compose.yml
+version: '3.8'
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
+services:
+  # 1. YOUR NODE.JS APP
+  electromart:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: t1nkerbe11/electromart:latest # Use your actual Docker Hub username here
+    container_name: electromart
+    ports:
+      - "3000:5000"
+    networks:
+      - monitoring
+
+  # 2. PROMETHEUS
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Loads the file we created
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    depends_on:
+      - electromart
+    networks:
+      - monitoring
+
+  # 3. GRAFANA
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3001:3000" # Grafana is accessed on host port 3001
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring
