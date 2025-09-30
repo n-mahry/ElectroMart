@@ -10,15 +10,15 @@ on:
       - main
 
 jobs:
-  # 1. Run Tests
+  # 1. Run Tests (no changes needed here)
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Updated to latest v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # Updated to latest v4
         with:
           node-version: 18
 
@@ -28,26 +28,59 @@ jobs:
       - name: Run tests
         run: npm test || echo "⚠️ No tests yet - skipping"
 
-  # 2. Build & Push Docker Image
-  build-and-push:
+  # 2. Build, Scan, & Push Docker Image (Updated logic)
+  build-scan-and-push:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Updated to latest v4
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 # Updated to latest v3
 
+      # ----------------------------------------------------------------------
+      # DOCKER LOGIN
+      # ----------------------------------------------------------------------
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3 # Updated to latest v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Define Image Tag
+        id: image_tag
+        run: echo "IMAGE_TAG=${{ secrets.DOCKER_USERNAME }}/electromart:latest" >> $GITHUB_OUTPUT
 
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v4
+      # ----------------------------------------------------------------------
+      # BUILD IMAGE (DO NOT PUSH YET)
+      # ----------------------------------------------------------------------
+      - name: Build Docker Image
+        uses: docker/build-push-action@v5 # Updated to latest v5
         with:
           context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/electromart:latest
+          push: false # Critical: Build locally, do not push before scanning
+          tags: ${{ steps.image_tag.outputs.IMAGE_TAG }}
+          load: true # Critical: Load the image into the local Docker daemon for Trivy scanning
+
+      # ----------------------------------------------------------------------
+      # SECURITY SCAN (Trivy)
+      # ----------------------------------------------------------------------
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.image_tag.outputs.IMAGE_TAG }}
+          format: 'table'
+          exit-code: '1' # Fails the job if severity threshold is met
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH' # Only allow deployment if critical/high issues are fixed
+
+      # ----------------------------------------------------------------------
+      # PUSH IMAGE (Only if the Scan Passes)
+      # ----------------------------------------------------------------------
+      - name: Push Docker Image to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true # Push the now-verified image
+          tags: ${{ steps.image_tag.outputs.IMAGE_TAG }}
