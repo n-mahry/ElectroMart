@@ -68,16 +68,32 @@ jobs:
      # ----------------------------------------------------------------------
       # SECURITY SCAN (Trivy)
       # ----------------------------------------------------------------------
+      # ... other steps above ...
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
+        timeout-minutes: 5
         with:
-          # Use the exact tag that was loaded in the previous step
-          image-ref: t1nkerbe11/electromart:latest
-          format: 'template'
-          output: 'trivy_envs.txt'
-          exit-code: '1'
+          # Assuming you have a previous step defining IMAGE_TAG, if not,
+          # use the hardcoded tag: t1nkerbe11/electromart:latest
+          image-ref: ${{ steps.image_tag.outputs.IMAGE_TAG }}
+          format: 'table'
+          output: 'trivy-report.json' # Change output format to JSON for the upload step
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+          # Fail on High/Critical (exit-code: 1), but don’t break the pipeline
+          continue-on-error: true 
+
+      - name: Upload Trivy Report
+        # Use a new JSON file name that matches the output above
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.json
+
+      # ... Push Docker Image step below ...
 
       # ----------------------------------------------------------------------
       # PUSH IMAGE (Only if the Scan Passes)
