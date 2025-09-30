@@ -68,12 +68,14 @@ jobs:
       # ----------------------------------------------------------------------
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
+        # Add a timeout of 5 minutes just for this step
+        timeout-minutes: 5 
         with:
           image-ref: ${{ steps.image_tag.outputs.IMAGE_TAG }}
           format: 'table'
-          exit-code: '1' # Fails the job if severity threshold is met
+          exit-code: '1'
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH' # Only allow deployment if critical/high issues are fixed
+          severity: 'CRITICAL,HIGH'
 
       # ----------------------------------------------------------------------
       # PUSH IMAGE (Only if the Scan Passes)
