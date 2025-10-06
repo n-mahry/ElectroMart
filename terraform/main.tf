@@ -1,4 +1,7 @@
-﻿resource "aws_security_group" "app_sg" {
+﻿##############################################
+# Security Group
+##############################################
+resource "aws_security_group" "app_sg" {
   name        = "app-sg"
   description = "Allow inbound HTTP and SSH"
 
@@ -26,10 +29,26 @@
   }
 }
 
+##############################################
+# Automatically fetch the latest Ubuntu 22.04 AMI
+##############################################
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical (Ubuntu)
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+}
+
+##############################################
+# EC2 Instance
+##############################################
 resource "aws_instance" "app_server" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = var.instance_type
-  key_name      = var.key_name
+  ami             = data.aws_ami.ubuntu.id
+  instance_type   = var.instance_type
+  key_name        = var.key_name
   security_groups = [aws_security_group.app_sg.name]
 
   user_data = <<-EOF
