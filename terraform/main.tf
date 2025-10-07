@@ -59,7 +59,7 @@ resource "aws_instance" "app_server" {
     sudo systemctl enable docker
     echo "${var.dockerhub_password}" | docker login -u "${var.dockerhub_username}" --password-stdin
     docker pull ${var.docker_image}
-    docker run -d -p 80:3000 ${var.docker_image}
+    docker run -d -p 80:5000 ${var.docker_image}
   EOF
 
   tags = {
