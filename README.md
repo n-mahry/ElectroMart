@@ -10,10 +10,10 @@ This project is built as part of a **DevOps pipeline project** to demonstrate mo
 - 📦 Shopping cart functionality
 - ✅ Checkout process
 - 🐳 Dockerized for containerized deployment
-- ⚙️ Ready for CI/CD with GitHub Actions / Jenkins
+- ⚙️ Ready for CI/CD with GitHub Actions 
 - ☁️ Infrastructure as Code with Terraform
 - 🔐 Basic DevSecOps practices (Trivy for image scanning)
-- 📊 Monitoring with Prometheus + Grafana (to be integrated later)
+- 📊 Monitoring with Prometheus + Grafana 
 
 ---
 
@@ -23,7 +23,7 @@ This project is built as part of a **DevOps pipeline project** to demonstrate mo
 - **Database:** MongoDB (optional, can run without for demo)
 - **Containerization:** Docker
 - **Infrastructure:** AWS (EC2, S3, Security Groups) via Terraform
-- **CI/CD:** GitHub Actions / Jenkins
+- **CI/CD:** GitHub Actions 
 - **Monitoring:** Prometheus + Grafana
 - **Security:** Trivy for container scanning
 
@@ -31,6 +31,7 @@ This project is built as part of a **DevOps pipeline project** to demonstrate mo
 
 ## 📂 Project Structure
 electromart/
+├── .github/workflows/ # CI/CD pipeline configurations
 
 ├── config/ # Database configuration
 
@@ -38,19 +39,31 @@ electromart/
 
 ├── models/ # Mongoose models (optional for DB)
 
+├── node_modules/ # Installed dependencies
+
 ├── public/ # Frontend files (HTML, CSS, JS)
 
 ├── routes/ # API routes
 
 ├── src/ # Core app (app.js, server.js)
 
+├── terraform/ # Infrastructure as Code (Terraform files)
+
+├── .env # Environment variables
+
+├── .gitignore # Git ignored files
+
+├── docker-compose.yml # Multi-container setup (future)
+
 ├── Dockerfile # Docker image definition
 
-├── docker-compose.yml# Multi-container setup (future)
+├── package-lock.json # Dependency lock file
 
-├── .gitignore # Ignored files
+├── package.json # Project dependencies and scripts
 
-└── README.md # Documentation
+├── prometheus.yml # Prometheus monitoring configuration
+
+└── README.md # Project documentation
 
 
 ---
@@ -63,7 +76,7 @@ docker build -t electromart .
 docker run -p 5000:5000 electromart
 
 Access the app:
-👉 http://localhost:5000
+👉 http://54.242.59.32/
 
 📌 DevOps Roadmap
 
@@ -71,17 +84,17 @@ Access the app:
 
 ✅ Dockerize the application
 
-⏳ Set up GitHub Actions pipeline
+✅ Set up GitHub Actions pipeline
 
-⏳ Push Docker images to DockerHub
+✅ Push Docker images to DockerHub
 
-⏳ Provision AWS infrastructure with Terraform
+✅ Provision AWS infrastructure with Terraform
 
-⏳ Deploy app to AWS EC2 / ECS
+✅ Deploy app to AWS EC2 / ECS
 
-⏳ Add monitoring with Prometheus + Grafana
+✅ Add monitoring with Prometheus + Grafana
 
-⏳ Secure pipeline with Trivy + secret management
+✅ Secure pipeline with Trivy + secret management
 
 🤝 Contributing
 

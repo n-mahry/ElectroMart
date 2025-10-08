@@ -1,4 +1,4 @@
-// ElectroMart - products with reliable images (Picsum seeds so links always work)
+
 const products = [
   { id: 1,
     name: "Apple iPhone 15 Pro",
