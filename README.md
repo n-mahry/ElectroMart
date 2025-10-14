@@ -28,6 +28,9 @@ This project is built as part of a **DevOps pipeline project** to demonstrate mo
 - **Security:** Trivy for container scanning
 
 ---
+![WhatsApp Image 2025-10-14 at 18 30 42_b89f638e](https://github.com/user-attachments/assets/5becf232-978e-4ab3-badf-ae24a8c1baa6)
+
+---
 
 ## 📂 Project Structure
 electromart/
